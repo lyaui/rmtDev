@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
+import { useJobItems } from '../lib/hooks';
 import Background from './Background';
 import Container from './Container';
 import Footer from './Footer';
@@ -16,29 +17,7 @@ import SortingControls from './SortingControls';
 
 function App() {
   const [searchText, setSearchText] = useState('');
-  const [jobItemList, setJobItemList] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (!searchText) return;
-
-    const fetchJobItemList = async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch(
-          `https://bytegrad.com/course-assets/projects/rmtdev/api/data?search=${searchText}`,
-        );
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setJobItemList(data.jobItems);
-      } catch {
-        console.log('something went wrong');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchJobItemList();
-  }, [searchText]);
+  const { jobItemList, isLoading } = useJobItems(searchText);
 
   return (
     <>
