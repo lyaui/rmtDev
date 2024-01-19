@@ -14,11 +14,12 @@ type JobItemProps = {
 };
 
 export default function JobItem({ jobItem }: JobItemProps) {
-  const { badgeLetters, company, title, daysAgo } = jobItem;
+  const { badgeLetters = '', company, title, daysAgo } = jobItem;
+
   return (
     <li className='job-item'>
       <a className='job-item__link'>
-        <div className='job-item__badge'>{badgeLetters}</div>
+        <div className='job-item__badge'>{badgeLetters || ''}</div>
 
         <div className='job-item__middle'>
           <h3 className='third-heading'>{title}</h3>
