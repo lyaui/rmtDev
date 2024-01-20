@@ -3,7 +3,7 @@ import BookmarkIcon from './BookmarkIcon';
 import Spinner from './Spinner';
 
 export default function JobItemContent() {
-  const { activeId } = useActiveId();
+  const activeId = useActiveId();
   const { jobItem, isLoading } = useJobItem(activeId);
 
   const {

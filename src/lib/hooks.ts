@@ -19,7 +19,7 @@ export const useActiveId = () => {
     };
   }, []);
 
-  return { activeId };
+  return activeId;
 };
 
 export const useJobItem = (id: number | null) => {
