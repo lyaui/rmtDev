@@ -23,14 +23,21 @@ export const useActiveId = () => {
   return activeId;
 };
 
-export const useJobItem = (id: number | null) => {
-  const { data, isLoading } = useQuery(
+type JobItemApiRes = {
+  public: boolean;
+  jobItem: TJobItemExpanded;
+};
+
+export const useJobItem = (id: number) => {
+  const fetchJobItem = async (id: number): Promise<JobItemApiRes> => {
+    const res = await fetch(`${BASE_API_URL}/${id}`);
+    const data = await res.json();
+    return data;
+  };
+
+  const { data, isInitialLoading } = useQuery(
     ['job-item', id],
-    async () => {
-      const res = await fetch(`${BASE_API_URL}/${id}`);
-      const data = await res.json();
-      return data;
-    },
+    () => (id ? fetchJobItem(id) : null),
     {
       staleTime: 1000 * 60 * 60, // 1hr
       refetchOnWindowFocus: false,
@@ -40,7 +47,7 @@ export const useJobItem = (id: number | null) => {
     },
   );
 
-  return { jobItem: data?.jobItem, isLoading } as const;
+  return { jobItem: data?.jobItem, isLoading: isInitialLoading } as const;
 };
 
 export const useJobItems = (searchText: string) => {
