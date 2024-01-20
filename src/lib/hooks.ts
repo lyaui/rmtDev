@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { BASE_API_URL } from './constants';
-import { TJobItem } from '../lib/types';
+import { TJobItem, TJobItemExpanded } from '../lib/types';
 
 export const useActiveId = () => {
   const [activeId, setActiveId] = useState<number | null>(null);
@@ -23,7 +23,7 @@ export const useActiveId = () => {
 };
 
 export const useJobItem = (id: number | null) => {
-  const [jobItem, setJobItem] = useState<TJobItem[]>([]);
+  const [jobItem, setJobItem] = useState<TJobItemExpanded | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export const useJobItem = (id: number | null) => {
         const res = await fetch(`${BASE_API_URL}/${id}`);
         if (!res.ok) throw new Error();
         const data = await res.json();
-        setJobItem(data.jobItems);
+        setJobItem(data.jobItem);
       } catch {
         console.log('something went wrong');
       } finally {

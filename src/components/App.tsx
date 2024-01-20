@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useJobItems, useJobItem, useActiveId } from '../lib/hooks';
+import { useJobItems } from '../lib/hooks';
 import Background from './Background';
 import Container from './Container';
 import Footer from './Footer';
@@ -17,10 +17,7 @@ import SortingControls from './SortingControls';
 
 function App() {
   const [searchText, setSearchText] = useState('');
-
-  const { activeId } = useActiveId();
   const { jobItemsSliced, isLoading } = useJobItems(searchText);
-  const { jobItem } = useJobItem(activeId);
 
   return (
     <>
