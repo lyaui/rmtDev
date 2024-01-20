@@ -30,7 +30,14 @@ type JobItemApiRes = {
 
 export const useJobItem = (id: number) => {
   const fetchJobItem = async (id: number): Promise<JobItemApiRes> => {
-    const res = await fetch(`${BASE_API_URL}/${id}`);
+    const res = await fetch(`${BASE_API_URL}/kk${id}`);
+
+    // 4xx 5xx
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.description);
+    }
+
     const data = await res.json();
     return data;
   };
@@ -43,7 +50,9 @@ export const useJobItem = (id: number) => {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: !!id, // condition
-      onError: (error) => {},
+      onError: (error) => {
+        console.log(error);
+      },
     },
   );
 
@@ -53,9 +62,6 @@ export const useJobItem = (id: number) => {
 export const useJobItems = (searchText: string) => {
   const [jobItemList, setJobItemList] = useState<TJobItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const jobItemsSliced = jobItemList.slice(0, 7);
-  const total = jobItemList.length;
 
   useEffect(() => {
     if (!searchText) return;
@@ -76,7 +82,7 @@ export const useJobItems = (searchText: string) => {
     fetchJobItemList();
   }, [searchText]);
 
-  return { jobItemsSliced, isLoading, total };
+  return { jobItemList, isLoading };
 };
 
 export const useDebounce = <T>(value: T, delay: number = 500): T => {
