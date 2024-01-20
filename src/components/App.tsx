@@ -17,7 +17,7 @@ import SortingControls from './SortingControls';
 
 function App() {
   const [searchText, setSearchText] = useState('');
-  const { jobItemsSliced, isLoading } = useJobItems(searchText);
+  const { jobItemsSliced, total, isLoading } = useJobItems(searchText);
 
   return (
     <>
@@ -32,7 +32,7 @@ function App() {
       <Container>
         <Sidebar>
           <SidebarTop>
-            <ResultsCount />
+            <ResultsCount count={total} />
             <SortingControls />
           </SidebarTop>
           <JobList jobItemList={jobItemsSliced} isLoading={isLoading} />
