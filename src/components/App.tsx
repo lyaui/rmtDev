@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 import { useJobItems, useDebounce } from '../lib/hooks';
 import Background from './Background';
@@ -20,8 +21,8 @@ function App() {
   const debouncedText = useDebounce(searchText, 250);
   const { jobItemList, isLoading } = useJobItems(debouncedText);
 
-  const jobItemsSliced = jobItemList.slice(0, 7);
-  const total = jobItemList.length;
+  const jobItemsSliced = jobItemList?.slice(0, 7) || [];
+  const total = jobItemList?.length || 0;
 
   return (
     <>
@@ -44,6 +45,7 @@ function App() {
         </Sidebar>
         <JobItemContent />
       </Container>
+      <Toaster position='top-right' />
       <Footer />
     </>
   );
