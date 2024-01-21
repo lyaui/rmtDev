@@ -31,7 +31,7 @@ type JobItemApiRes = {
 
 export const useJobItem = (id: number) => {
   const fetchJobItem = async (id: number): Promise<JobItemApiRes> => {
-    const res = await fetch(`${BASE_API_URL}/kk${id}`);
+    const res = await fetch(`${BASE_API_URL}/${id}`);
 
     // 4xx 5xx
     if (!res.ok) {
