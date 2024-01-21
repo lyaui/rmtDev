@@ -22,3 +22,8 @@ export enum PAGE_DIRECTION {
   BACK = 'back',
   NEXT = 'next',
 }
+
+export enum SORT_BY {
+  RELEVANT = 'relevant',
+  RECENT = 'recent',
+}
