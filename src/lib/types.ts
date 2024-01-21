@@ -17,3 +17,8 @@ export type TJobItemExpanded = TJobItem & {
   coverImgURL: string;
   companyURL: string;
 };
+
+export enum PAGE_DIRECTION {
+  BACK = 'back',
+  NEXT = 'next',
+}

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { useJobItems, useDebounce } from '../lib/hooks';
+import { PAGE_DIRECTION } from '../lib/types';
+import { RESULT_PER_PAGE } from '../lib/constants';
 import Background from './Background';
 import Container from './Container';
 import Footer from './Footer';
@@ -17,12 +19,29 @@ import ResultsCount from './ResultsCount';
 import SortingControls from './SortingControls';
 
 function App() {
+  // state
   const [searchText, setSearchText] = useState('');
   const debouncedText = useDebounce(searchText, 250);
-  const { jobItemList, isLoading } = useJobItems(debouncedText);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const jobItemsSliced = jobItemList?.slice(0, 7) || [];
+  // computed(derived) states
+  const { jobItemList, isLoading } = useJobItems(debouncedText);
+  const jobItemsSliced =
+    jobItemList?.slice(
+      (currentPage - 1) * RESULT_PER_PAGE,
+      currentPage * RESULT_PER_PAGE,
+    ) || [];
   const total = jobItemList?.length || 0;
+  const totalPages = Math.ceil(total / RESULT_PER_PAGE);
+
+  // event handler / actions
+  const handleChangePage = (direction: PAGE_DIRECTION) => {
+    if (direction === PAGE_DIRECTION.NEXT) {
+      setCurrentPage((_curState) => _curState + 1);
+    } else if (direction === PAGE_DIRECTION.BACK) {
+      setCurrentPage((_curState) => _curState - 1);
+    }
+  };
 
   return (
     <>
@@ -34,6 +53,7 @@ function App() {
         </HeaderTop>
         <SearchForm searchText={searchText} setSearchText={setSearchText} />
       </Header>
+
       <Container>
         <Sidebar>
           <SidebarTop>
@@ -41,7 +61,11 @@ function App() {
             <SortingControls />
           </SidebarTop>
           <JobList jobItemList={jobItemsSliced} isLoading={isLoading} />
-          <PaginationControls />
+          <PaginationControls
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onClick={handleChangePage}
+          />
         </Sidebar>
         <JobItemContent />
       </Container>
