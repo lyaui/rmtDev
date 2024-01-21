@@ -1,9 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { BASE_API_URL } from './constants';
 import { handleError } from './utils';
 import { TJobItem, TJobItemExpanded } from '../lib/types';
+import { BookmarkContext } from '../contexts/BookmarksContextProvider';
+
+export const useBookmarksCtxVal = () => {
+  const ctx = useContext(BookmarkContext);
+  if (!ctx) {
+    throw new Error('BookmarkContext is not defined');
+  }
+  return ctx;
+};
 
 export const useActiveId = () => {
   const [activeId, setActiveId] = useState<number | null>(null);
@@ -29,7 +38,7 @@ type JobItemApiRes = {
   jobItem: TJobItemExpanded;
 };
 
-export const useJobItem = (id: number) => {
+export const useJobItem = (id: number | null) => {
   const fetchJobItem = async (id: number): Promise<JobItemApiRes> => {
     const res = await fetch(`${BASE_API_URL}/${id}`);
 
