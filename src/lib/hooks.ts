@@ -14,6 +14,18 @@ export const useBookmarksCtxVal = () => {
   return ctx;
 };
 
+export const useLocalStorage = <T>(key: string, defaultValue: T) => {
+  const [value, setValue] = useState<T>(() =>
+    JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValue)),
+  );
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue] as const;
+};
+
 export const useActiveId = () => {
   const [activeId, setActiveId] = useState<number | null>(null);
 
