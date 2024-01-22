@@ -1,12 +1,14 @@
+import { forwardRef } from 'react';
 import { JobList } from './JobList';
 import { useBookmarksCtxVal } from '../lib/hooks';
 
-export default function BookmarksPopover({ isOpen }) {
+const BookmarksPopover = forwardRef<HTMLDivElement>((_, ref) => {
   const { bookmarkedJobItems, isLoading } = useBookmarksCtxVal();
-  if (!isOpen) return null;
   return (
-    <div className='bookmarks-popover'>
+    <div className='bookmarks-popover' ref={ref}>
       <JobList jobItemList={bookmarkedJobItems} isLoading={isLoading} />
     </div>
   );
-}
+});
+
+export default BookmarksPopover;
