@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import type { RefObject } from 'react';
 import { useQuery, useQueries } from '@tanstack/react-query';
 
 import { BASE_API_URL } from './constants';
@@ -150,4 +151,26 @@ export const useDebounce = <T>(value: T, delay: number = 500): T => {
   }, [value, delay]);
 
   return debouncedValue;
+};
+
+export const useClickOutside = (
+  refs: RefObject<HTMLElement>[],
+  cb: () => void,
+) => {
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (
+        refs.every((_ref) => !_ref.current?.contains(event.target as Node))
+        // !buttonRef.current.contains(event.target) && // e.target.contains() 的參數應該是一個 DOM 元素
+        // !buttonRef.current.contains(event.target)
+      ) {
+        cb();
+      }
+    };
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, [refs, cb]);
 };

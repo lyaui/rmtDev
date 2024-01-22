@@ -3,6 +3,7 @@ import type { MouseEvent } from 'react';
 import { TriangleDownIcon } from '@radix-ui/react-icons';
 
 import BookmarksPopover from './BookmarksPopover';
+import { useClickOutside } from '../lib/hooks';
 
 export default function BookmarksButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,23 +11,7 @@ export default function BookmarksButton() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (!(event.target instanceof HTMLElement)) return;
-      if (!buttonRef.current) return;
-      if (
-        !buttonRef.current.contains(event.target) &&
-        !event.target.closest('.bookmarks-popover')
-      ) {
-        setIsOpen(false); // e.target.contains() 的參數應該是一個 DOM 元素
-      }
-    };
-    document.addEventListener('click', handleClick);
-
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, []);
+  useClickOutside([buttonRef, popoverRef], () => setIsOpen(false));
 
   return (
     <section>
