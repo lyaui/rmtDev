@@ -5,7 +5,16 @@ import { useQuery, useQueries } from '@tanstack/react-query';
 import { BASE_API_URL } from './constants';
 import { handleError } from './utils';
 import { TJobItem, TJobItemExpanded } from '../lib/types';
+import { ActiveIdContext } from '../contexts/ActiveIdContextProvider';
 import { BookmarkContext } from '../contexts/BookmarksContextProvider';
+
+export const useActiveIdCtxVal = () => {
+  const ctx = useContext(ActiveIdContext);
+  if (!ctx) {
+    throw new Error('ActiveIdContext is not defined');
+  }
+  return ctx;
+};
 
 export const useBookmarksCtxVal = () => {
   const ctx = useContext(BookmarkContext);

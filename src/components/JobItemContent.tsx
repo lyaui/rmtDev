@@ -1,16 +1,12 @@
-import { useJobItem, useActiveId } from '../lib/hooks';
+import { useJobItem, useActiveIdCtxVal } from '../lib/hooks';
 import BookmarkIcon from './BookmarkIcon';
 import Spinner from './Spinner';
 
 export default function JobItemContent() {
-  const activeId = useActiveId();
+  const { activeId } = useActiveIdCtxVal();
   const { jobItem, isLoading } = useJobItem(activeId);
 
   let content = null;
-
-  if (isLoading) {
-    content = <LoadingJobContent />;
-  }
 
   if (!jobItem) {
     content = <EmptyJobContent />;
@@ -113,6 +109,10 @@ export default function JobItemContent() {
         </div>
       </section>
     );
+  }
+
+  if (isLoading) {
+    content = <LoadingJobContent />;
   }
 
   return content;
