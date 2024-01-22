@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueries } from '@tanstack/react-query';
 
 import { BASE_API_URL } from './constants';
 import { handleError } from './utils';
@@ -50,20 +50,20 @@ type JobItemApiRes = {
   jobItem: TJobItemExpanded;
 };
 
+const fetchJobItem = async (id: number): Promise<JobItemApiRes> => {
+  const res = await fetch(`${BASE_API_URL}/${id}`);
+
+  // 4xx 5xx
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.description);
+  }
+
+  const data = await res.json();
+  return data;
+};
+
 export const useJobItem = (id: number | null) => {
-  const fetchJobItem = async (id: number): Promise<JobItemApiRes> => {
-    const res = await fetch(`${BASE_API_URL}/${id}`);
-
-    // 4xx 5xx
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.description);
-    }
-
-    const data = await res.json();
-    return data;
-  };
-
   const { data, isInitialLoading } = useQuery(
     ['job-item', id],
     () => (id ? fetchJobItem(id) : null),
@@ -81,13 +81,37 @@ export const useJobItem = (id: number | null) => {
   return { jobItem: data?.jobItem, isLoading: isInitialLoading } as const;
 };
 
+export const useJobItems = (ids: number[]) => {
+  const result = useQueries({
+    queries: ids.map((_id) => ({
+      queryKey: ['job-item', _id],
+      queryFn: () => fetchJobItem(_id),
+      ...{
+        staleTime: 1000 * 60 * 60,
+        refetchOnWindowFocus: false,
+        retry: false,
+        enabled: !!_id,
+        onError: handleError,
+      },
+    })),
+  });
+
+  const jobItems = result
+    .map((_result) => _result.data?.jobItem)
+    .filter((_item) => !!_item) as TJobItemExpanded[]; // 濾掉 undefined
+
+  const isLoading = result.some((_result) => _result.isLoading);
+
+  return { jobItems, isLoading } as const;
+};
+
 type JobItemsApiRes = {
   public: boolean;
   sorted: boolean;
   jobItems: TJobItem[];
 };
 
-export const useJobItems = (searchText: string) => {
+export const useSearchQuery = (searchText: string) => {
   const fetchJobItems = async (searchText: string): Promise<JobItemsApiRes> => {
     const res = await fetch(`${BASE_API_URL}?search=${searchText}`);
     if (!res.ok) {
