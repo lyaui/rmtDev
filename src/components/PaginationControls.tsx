@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 
+import { useJobItemsContextVal } from '../lib/hooks';
 import { PAGE_DIRECTION } from '../lib/types';
 
 type PaginationButtonProps = {
@@ -38,31 +39,22 @@ const PaginationButton = ({
   );
 };
 
-type PaginationProps = {
-  totalPages: number;
-  currentPage: number;
-  onClick: (direction: PAGE_DIRECTION) => void;
-};
-
-export default function Pagination({
-  totalPages,
-  currentPage,
-  onClick,
-}: PaginationProps) {
+export default function Pagination() {
+  const { totalPages, currentPage, handleChangePage } = useJobItemsContextVal();
   return (
     <section className='pagination'>
       {currentPage > 1 && (
         <PaginationButton
           direction={PAGE_DIRECTION.BACK}
           currentPage={currentPage}
-          onClick={() => onClick(PAGE_DIRECTION.BACK)}
+          onClick={() => handleChangePage(PAGE_DIRECTION.BACK)}
         />
       )}
       {currentPage < totalPages && (
         <PaginationButton
           direction={PAGE_DIRECTION.NEXT}
           currentPage={currentPage}
-          onClick={() => onClick(PAGE_DIRECTION.NEXT)}
+          onClick={() => handleChangePage(PAGE_DIRECTION.NEXT)}
         />
       )}
     </section>

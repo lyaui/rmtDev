@@ -5,8 +5,26 @@ import { useQuery, useQueries } from '@tanstack/react-query';
 import { BASE_API_URL } from './constants';
 import { handleError } from './utils';
 import { TJobItem, TJobItemExpanded } from '../lib/types';
+import { JobItemsContext } from '../contexts/JobItemsContextProvider';
+import { SearchTextContext } from '../contexts/SearchTextContextProvider';
 import { ActiveIdContext } from '../contexts/ActiveIdContextProvider';
 import { BookmarkContext } from '../contexts/BookmarksContextProvider';
+
+export const useJobItemsContextVal = () => {
+  const ctx = useContext(JobItemsContext);
+  if (!ctx) {
+    throw new Error('JobItemsContext is not defined');
+  }
+  return ctx;
+};
+
+export const useSearchTextCtxVal = () => {
+  const ctx = useContext(SearchTextContext);
+  if (!ctx) {
+    throw new Error('SearchTextContext is not defined');
+  }
+  return ctx;
+};
 
 export const useActiveIdCtxVal = () => {
   const ctx = useContext(ActiveIdContext);

@@ -1,25 +1,22 @@
 import type { ReactNode } from 'react';
 
+import { useJobItemsContextVal } from '../lib/hooks';
 import { SORT_BY } from '../lib/types';
 
-type SortingProps = {
-  sortBy: SORT_BY;
-  onClick: (sortBy: SORT_BY) => void;
-};
-
-export default function Sorting({ sortBy, onClick }: SortingProps) {
+export default function Sorting() {
+  const { sortBy, handleChangeSortBy } = useJobItemsContextVal();
   return (
     <section className='sorting'>
       <i className='fa-solid fa-arrow-down-short-wide'></i>
       <SortByButton
         isActive={sortBy === SORT_BY.RELEVANT}
-        onClick={() => onClick(SORT_BY.RELEVANT)}
+        onClick={() => handleChangeSortBy(SORT_BY.RELEVANT)}
       >
         Relevant
       </SortByButton>
       <SortByButton
         isActive={sortBy === SORT_BY.RECENT}
-        onClick={() => onClick(SORT_BY.RECENT)}
+        onClick={() => handleChangeSortBy(SORT_BY.RECENT)}
       >
         Recent
       </SortByButton>

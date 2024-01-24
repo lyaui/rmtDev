@@ -1,10 +1,10 @@
-type ResultsCount = {
-  count: number;
-};
-export default function ResultsCount({ count }: ResultsCount) {
+import { useJobItemsContextVal } from '../lib/hooks';
+
+export default function ResultsCount() {
+  const { total } = useJobItemsContextVal();
   return (
     <p className='count'>
-      <span className='u-bold'>{count} results</span>
+      <span className='u-bold'>{total} results</span>
     </p>
   );
 }

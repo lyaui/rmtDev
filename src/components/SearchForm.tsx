@@ -1,19 +1,15 @@
 import type { ChangeEvent, FormEvent } from 'react';
 
-type SearchFormProps = {
-  searchText: string;
-  setSearchText: (text: string) => void;
-};
+import { useSearchTextCtxVal } from '../lib/hooks';
 
-export default function SearchForm({
-  searchText,
-  setSearchText,
-}: SearchFormProps) {
+export default function SearchForm() {
+  const { searchText, handleChangeSearchText } = useSearchTextCtxVal();
+
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
+    handleChangeSearchText(event.target.value);
   };
   return (
     <form onSubmit={handleFormSubmit} action='#' className='search'>
