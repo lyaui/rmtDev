@@ -6,9 +6,9 @@ import Header, { HeaderTop } from './Header';
 import BookmarksButton from './BookmarksButton';
 import Logo from './Logo';
 import SearchForm from './SearchForm';
+import JobListSearch from './JobListSearch';
 import JobItemContent from './JobItemContent';
 import Sidebar, { SidebarTop } from './Sidebar';
-import JobList from './JobList';
 import PaginationControls from './PaginationControls';
 import ResultsCount from './ResultsCount';
 import SortingControls from './SortingControls';
@@ -31,10 +31,7 @@ function App() {
             <ResultsCount />
             <SortingControls />
           </SidebarTop>
-          <JobList
-            jobItemList={jobItemsSortedAndSliced}
-            isLoading={isLoading}
-          />
+          <JobListSearch />
           <PaginationControls />
         </Sidebar>
         <JobItemContent />
